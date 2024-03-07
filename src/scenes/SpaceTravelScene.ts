@@ -6,6 +6,7 @@ export default class SpaceTravelScene extends Phaser.Scene {
     private fpsText: FpsText;
     private ship: Phaser.Physics.Arcade.Sprite;
     private GameOver: boolean = false;
+    private portals: Phaser.Physics.Arcade.StaticGroup;
 
     constructor() {
         super({ key: "SpaceTravelScene" });
@@ -13,26 +14,27 @@ export default class SpaceTravelScene extends Phaser.Scene {
 
     create() {
         this.add.image(400, 300, "space");
-        this.add.text(300, 200, "Main Menu", {
-            fontSize: "32px",
-            color: "red",
-        });
 
-        this.add
-            .text(300, 300, "Start Game", { fontSize: "24px", color: "#000" })
-            .setInteractive()
-            .on("pointerdown", () => {
-                this.ship.destroy();
-                this.anims.remove("left");
-                this.anims.remove("right");
-                this.anims.remove("up");
-                this.anims.remove("down");
-                this.anims.remove("turn");
-                this.scene.start("MainScene");
-            });
+        this.portals = this.physics.add.staticGroup();
+        let portal: Phaser.Physics.Arcade.Sprite = this.portals.create(
+            700,
+            90,
+            "portal"
+        );
+        portal.body?.setSize(0.2, 0.2);
+        portal.setScale(0.2, 0.2);
 
         this.ship = this.physics.add.sprite(100, 450, "ship");
         this.ship.setCollideWorldBounds(true);
+
+        this.physics.add.collider(this.ship, this.portals, () => {
+            this.anims.remove("left");
+            this.anims.remove("right");
+            this.anims.remove("up");
+            this.anims.remove("down");
+            this.anims.remove("turn");
+            this.scene.start("MainScene");
+        });
 
         this.anims.create({
             key: "left",
