@@ -6,7 +6,9 @@ export default class PreloadScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image("sky", "assets/sky.png");
+        this.load.image("sky", "assets/background2.png");
+        this.load.image("gameOverBack", "assets/sky.png");
+        this.load.image("menuScene", "assets/background4.png");
         this.load.image("platform", "assets/platform.png");
         this.load.spritesheet("dude", "assets/dude.png", {
             frameWidth: 32,
@@ -15,6 +17,6 @@ export default class PreloadScene extends Phaser.Scene {
     }
 
     create() {
-        this.scene.start("MainScene");
+        this.scene.start("GameStartScene");
     }
 }

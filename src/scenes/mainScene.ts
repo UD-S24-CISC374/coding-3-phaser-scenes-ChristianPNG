@@ -1,15 +1,10 @@
 import Phaser from "phaser";
-import PhaserLogo from "../objects/phaserLogo";
 import FpsText from "../objects/fpsText";
 
 export default class MainScene extends Phaser.Scene {
     private platforms: Phaser.Physics.Arcade.StaticGroup;
     private player: Phaser.Physics.Arcade.Sprite;
     private cursor?: Phaser.Types.Input.Keyboard.CursorKeys;
-    private stars: Phaser.Physics.Arcade.Group;
-    private score: number = 0;
-    private scoreText: Phaser.GameObjects.Text;
-    private bombs: Phaser.Physics.Arcade.Group;
     private GameOver: boolean = false;
     private fpsText: FpsText;
 
@@ -18,7 +13,7 @@ export default class MainScene extends Phaser.Scene {
     }
 
     create() {
-        new PhaserLogo(this, this.cameras.main.width / 2, 0);
+        this.add.image(400, 300, "sky");
         this.fpsText = new FpsText(this);
 
         const message = `Phaser v${Phaser.VERSION}`;
@@ -29,7 +24,6 @@ export default class MainScene extends Phaser.Scene {
             })
             .setOrigin(1, 0);
 
-        this.add.image(400, 300, "sky");
         this.platforms = this.physics.add.staticGroup();
         this.platforms.create(400, 568, "platform").setScale(2).refreshBody();
         this.platforms.create(600, 400, "platform");
