@@ -6,10 +6,24 @@ export default class PreloadScene extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image("phaser-logo", "assets/img/phaser-logo.png");
+        this.load.image("sky", "assets/background2.png");
+        this.load.image("gameOverBack", "assets/sky.png");
+        this.load.image("menuScene", "assets/background4.png");
+        this.load.image("platform", "assets/platform.png");
+        this.load.image("space", "assets/background3.jpg");
+        this.load.image("portal", "assets/portal.png");
+        this.load.spritesheet("dude", "assets/dude.png", {
+            frameWidth: 32,
+            frameHeight: 48,
+        });
+        this.load.spritesheet("ship", "assets/ship.png", {
+            frameWidth: 16,
+            frameHeight: 24,
+        });
     }
 
     create() {
-        this.scene.start("MainScene");
+        this.registry.set("score", 0);
+        this.scene.start("GameStartScene");
     }
 }
