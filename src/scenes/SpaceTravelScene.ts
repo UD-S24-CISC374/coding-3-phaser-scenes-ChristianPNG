@@ -17,12 +17,12 @@ export default class SpaceTravelScene extends Phaser.Scene {
 
         this.portals = this.physics.add.staticGroup();
         let portal: Phaser.Physics.Arcade.Sprite = this.portals.create(
-            700,
-            90,
+            400,
+            200,
             "portal"
         );
-        portal.body?.setSize(0.2, 0.2);
-        portal.setScale(0.2, 0.2);
+        portal.body!.setSize(70, 70);
+        portal.setScale(0.5, 0.5);
 
         this.ship = this.physics.add.sprite(100, 450, "ship");
         this.ship.setCollideWorldBounds(true);
@@ -55,25 +55,29 @@ export default class SpaceTravelScene extends Phaser.Scene {
 
         this.cursor = this.input.keyboard?.createCursorKeys();
         this.physics.world.gravity.y = 0;
+
+        this.add.text(16, 16, "score: " + this.registry.get("score"), {
+            fontSize: "32px",
+            color: "#000",
+            strokeThickness: 2,
+            stroke: "#000",
+        });
     }
 
     update() {
-        if (!this.GameOver) {
-            if (this.cursor?.left.isDown) {
-                this.ship.setVelocityX(-260);
-                this.ship.anims.play("left", true);
-            } else if (this.cursor?.right.isDown) {
-                this.ship.setVelocityX(260);
-                this.ship.anims.play("right", true);
-            } else if (this.cursor?.up.isDown) {
-                this.ship.setVelocityY(-260);
-            } else if (this.cursor?.down.isDown) {
-                this.ship.setVelocityY(260);
-            } else {
-                this.ship.setVelocityX(0);
-                this.ship.setVelocityY(0);
-                this.ship.anims.play("turn");
-            }
+        if (this.cursor?.left.isDown) {
+            this.ship.setVelocityX(-260);
+            this.ship.anims.play("left", true);
+        } else if (this.cursor?.right.isDown) {
+            this.ship.setVelocityX(260);
+            this.ship.anims.play("right", true);
+        } else if (this.cursor?.up.isDown) {
+            this.ship.setVelocityY(-260);
+        } else if (this.cursor?.down.isDown) {
+            this.ship.setVelocityY(260);
+        } else {
+            this.ship.setVelocity(0);
+            this.ship.anims.play("turn");
         }
     }
 }

@@ -15,5 +15,15 @@ export default class GameOverScene extends Phaser.Scene {
             fontSize: "32px",
             color: "red",
         });
+
+        const curr: number = this.registry.get("score");
+        this.registry.set("score", curr + 50);
+
+        this.add.text(16, 16, "Final score: " + this.registry.get("score"), {
+            fontSize: "32px",
+            color: "#000",
+            strokeThickness: 2,
+            stroke: "#000",
+        });
     }
 }

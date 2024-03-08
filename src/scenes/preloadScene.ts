@@ -23,6 +23,7 @@ export default class PreloadScene extends Phaser.Scene {
     }
 
     create() {
-        this.scene.start("SpaceTravelScene");
+        this.registry.set("score", 0);
+        this.scene.start("GameStartScene");
     }
 }

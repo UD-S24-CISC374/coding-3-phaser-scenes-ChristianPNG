@@ -20,7 +20,14 @@ export default class GameStartScene extends Phaser.Scene {
             .text(300, 300, "Start Game", { fontSize: "24px", color: "#000" })
             .setInteractive()
             .on("pointerdown", () => {
-                this.scene.start("MainScene");
+                this.scene.start("SpaceTravelScene");
             });
+
+        this.add.text(16, 16, "score: " + this.registry.get("score"), {
+            fontSize: "32px",
+            color: "#000",
+            strokeThickness: 2,
+            stroke: "#000",
+        });
     }
 }

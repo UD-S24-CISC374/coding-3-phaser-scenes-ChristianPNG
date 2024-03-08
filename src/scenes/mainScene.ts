@@ -1,12 +1,11 @@
 import Phaser from "phaser";
-import FpsText from "../objects/fpsText";
 
 export default class MainScene extends Phaser.Scene {
     private platforms: Phaser.Physics.Arcade.StaticGroup;
     private player: Phaser.Physics.Arcade.Sprite;
     private cursor?: Phaser.Types.Input.Keyboard.CursorKeys;
     private GameOver: boolean = false;
-    private fpsText: FpsText;
+    private portals: Phaser.Physics.Arcade.StaticGroup;
 
     constructor() {
         super({ key: "MainScene" });
@@ -14,15 +13,15 @@ export default class MainScene extends Phaser.Scene {
 
     create() {
         this.add.image(400, 300, "sky");
-        this.fpsText = new FpsText(this);
 
-        const message = `Phaser v${Phaser.VERSION}`;
-        this.add
-            .text(this.cameras.main.width - 15, 15, message, {
-                color: "#000000",
-                fontSize: "24px",
-            })
-            .setOrigin(1, 0);
+        this.portals = this.physics.add.staticGroup();
+        let portal: Phaser.Physics.Arcade.Sprite = this.portals.create(
+            700,
+            90,
+            "portal"
+        );
+        portal.body?.setSize(0.2, 0.2);
+        portal.setScale(0.2, 0.2);
 
         this.platforms = this.physics.add.staticGroup();
         this.platforms.create(400, 568, "platform").setScale(2).refreshBody();
@@ -35,6 +34,13 @@ export default class MainScene extends Phaser.Scene {
         this.player.setBounce(0.2);
         this.player.setCollideWorldBounds(true);
         this.physics.add.collider(this.player, this.platforms);
+
+        this.physics.add.collider(this.player, this.portals, () => {
+            this.anims.remove("left");
+            this.anims.remove("right");
+            this.anims.remove("turn");
+            this.scene.start("GameOverScene");
+        });
 
         //implementing player animation
         this.anims.create({
@@ -65,10 +71,19 @@ export default class MainScene extends Phaser.Scene {
 
         //keyboard input
         this.cursor = this.input.keyboard?.createCursorKeys();
+
+        const curr: number = this.registry.get("score");
+        this.registry.set("score", curr + 50);
+
+        this.add.text(16, 16, "score: " + this.registry.get("score"), {
+            fontSize: "32px",
+            color: "#000",
+            strokeThickness: 2,
+            stroke: "#000",
+        });
     }
 
     update() {
-        this.fpsText.update();
         if (!this.GameOver) {
             if (this.cursor?.left.isDown) {
                 this.player.setVelocityX(-260);
